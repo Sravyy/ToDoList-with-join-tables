@@ -105,5 +105,25 @@ namespace ToDoList.Tests
       Assert.AreEqual(newDescription, result);
     }
 
+    [TestMethod]
+    public void DeleteTask_DeleteTaskInDatabase_Null()
+    {
+      //Arrange
+      string description = "Feed the Fish";
+      Task testTask = new Task(description, 1, "2017-01-01");
+      testTask.Save();
+      // string deletedTask = "";
+
+      //Act
+      testTask.DeleteTask();
+      int result = Task.GetAll().Count;
+
+      //Assert
+      Assert.AreEqual(0, result);
+
+
+
+
+    }
   }
 }

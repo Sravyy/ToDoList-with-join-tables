@@ -14,7 +14,7 @@
     {
       <tr>
       <td>@task.GetId()</td>
-      <td>@task.GetDescription()</td>
+      <td>@task.GetDescription() | <a href="/tasks/@task.GetId()/edit">Edit</a> | <a href="/tasks/@task.GetId()/delete">Delete</a></td>
       <td>@task.GetDueDate()</td>
       </tr>
     }

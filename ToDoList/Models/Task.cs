@@ -73,6 +73,27 @@ namespace ToDoList.Models
       }
     }
 
+    public void DeleteTask()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM tasks WHERE id = @thisId;";
+
+      MySqlParameter thisId = new MySqlParameter();
+      thisId.ParameterName = "@thisId";
+      thisId.Value = _id;
+      cmd.Parameters.Add(thisId);
+
+      cmd.ExecuteNonQuery();
+
+      conn.Close();
+      if (conn != null)
+      {
+          conn.Dispose();
+      }
+    }
+
     public int GetId()
     {
       return _id;
@@ -126,7 +147,7 @@ namespace ToDoList.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM tasks;";
+      cmd.CommandText = @"SELECT * FROM tasks ORDER BY due_date DESC;";
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       while(rdr.Read())
       {

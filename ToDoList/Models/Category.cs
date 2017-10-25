@@ -48,7 +48,7 @@ namespace ToDoList.Models
             MySqlConnection conn = DB.Connection();
             conn.Open();
             var cmd = conn.CreateCommand() as MySqlCommand;
-            cmd.CommandText = @"SELECT * FROM tasks WHERE category_id = @category_id;";
+            cmd.CommandText = @"SELECT * FROM tasks WHERE category_id = @category_id ORDER BY due_date DESC;";
 
             MySqlParameter categoryId = new MySqlParameter();
             categoryId.ParameterName = "@category_id";

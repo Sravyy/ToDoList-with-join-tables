@@ -81,5 +81,36 @@ namespace TodoList.Controllers
       //return the task list for selected category
       return View("CategoryDetail", model);
     }
+
+    [HttpGet("/tasks/{id}/edit")]
+    public ActionResult TaskEdit(int id)
+    {
+      // Dictionary<string, object> model = new Dictionary<string, object>();
+      // Category selectedCategory = Category.Find(id); //Category is selected as an object
+      // List<Task> categoryTasks = selectedCategory.GetTasks(); //Tasks are displayed in a list
+      //
+      // model.Add("category", selectedCategory);
+      // model.Add("tasks", categoryTasks);
+
+      Task thisTask = Task.Find(id);
+      return View(thisTask);
+    }
+
+    [HttpPost("/tasks/{id}/edit")]
+    public ActionResult TaskEditConfirm(int id)
+    {
+      Task thisTask = Task.Find(id);
+      thisTask.UpdateDescription(Request.Form["new-name"]);
+      return RedirectToAction("Index");
+    }
+    [HttpGet("/tasks/{id}/delete")]
+    public ActionResult TaskDeleteConfirm(int id)
+    {
+      Task thisTask = Task.Find(id);
+      thisTask.DeleteTask();
+      return RedirectToAction("Index");
+    }
+
+
   }
 }

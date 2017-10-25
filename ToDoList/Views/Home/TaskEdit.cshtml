@@ -1,0 +1,9 @@
+<h1>To Do List</h1>
+<hr>
+@* <h2>Edit category: @Model.GetName()</h2> *@
+<form action="/tasks/@Model.GetId()/edit" method="post">
+    <label for="new-name">Name:</label>
+    <input type="text" name="new-name" value="@Model.GetDescription()">
+    <button type="submit">Edit</button>
+</form>
+<h4><a href="/">Return home</a></h4>
