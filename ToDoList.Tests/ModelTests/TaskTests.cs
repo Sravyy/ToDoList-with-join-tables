@@ -35,8 +35,8 @@ namespace ToDoList.Tests
     public void Equals_OverrideTrueIfDescriptionsAreTheSame_Task()
     {
       // Arrange, Act
-      Task firstTask = new Task("Mow the lawn",1,"2017-01-01");
-      Task secondTask = new Task("Mow the lawn",1,"2017-01-01");
+      Task firstTask = new Task("Mow the lawn","2017-01-01");
+      Task secondTask = new Task("Mow the lawn","2017-01-01");
 
       // Assert
       Assert.AreEqual(firstTask, secondTask);
@@ -46,7 +46,7 @@ namespace ToDoList.Tests
     public void Save_SavesToDatabase_TaskList()
     {
       //Arrange
-      Task testTask = new Task("Mow the lawn",1,"2017-01-01");
+      Task testTask = new Task("Mow the lawn","2017-01-01");
 
       //Act
       testTask.Save();
@@ -61,7 +61,7 @@ namespace ToDoList.Tests
     public void Save_AssignsIdToObject_Id()
     {
       //Arrange
-      Task testTask = new Task("Mow the lawn",1,"2017-01-01");
+      Task testTask = new Task("Mow the lawn","2017-01-01");
 
       //Act
       testTask.Save();
@@ -78,7 +78,7 @@ namespace ToDoList.Tests
     public void Find_FindsTaskInDatabase_Task()
     {
       //Arrange
-      Task testTask = new Task("Mow the lawn",1,"2017-01-01");
+      Task testTask = new Task("Mow the lawn","2017-01-01");
       testTask.Save();
 
       //Act
@@ -87,43 +87,105 @@ namespace ToDoList.Tests
       //Assert
       Assert.AreEqual(testTask, foundTask);
     }
+
     [TestMethod]
-    public void Update_UpdatesTaskInDatabase_String()
+    public void AddCategory_AddsCategoryToTask_CategoryList()
     {
       //Arrange
-      string description = "Walk the Dog";
-      Task testTask = new Task(description, 1, "2017-01-01");
+      Task testTask = new Task("Mow the lawn","2017-01-01");
       testTask.Save();
-      string newDescription = "Mow the lawn";
+
+      Category testCategory = new Category("Home stuff");
+      testCategory.Save();
 
       //Act
-      testTask.UpdateDescription(newDescription);
+      testTask.AddCategory(testCategory);
 
-      string result = Task.Find(testTask.GetId()).GetDescription();
+      List<Category> result = testTask.GetCategories();
+      List<Category> testList = new List<Category>{testCategory};
 
       //Assert
-      Assert.AreEqual(newDescription, result);
+      CollectionAssert.AreEqual(testList, result);
     }
 
     [TestMethod]
-    public void DeleteTask_DeleteTaskInDatabase_Null()
+    public void GetCategories_ReturnsAllTaskCategories_CategoryList()
     {
       //Arrange
-      string description = "Feed the Fish";
-      Task testTask = new Task(description, 1, "2017-01-01");
+      Task testTask = new Task("Mow the lawn","2017-01-01");
       testTask.Save();
-      // string deletedTask = "";
+
+      Category testCategory1 = new Category("Home stuff");
+      testCategory1.Save();
+
+      Category testCategory2 = new Category("Work stuff");
+      testCategory2.Save();
 
       //Act
-      testTask.DeleteTask();
-      int result = Task.GetAll().Count;
+      testTask.AddCategory(testCategory1);
+      List<Category> result = testTask.GetCategories();
+      List<Category> testList = new List<Category> {testCategory1};
 
       //Assert
-      Assert.AreEqual(0, result);
-
-
-
-
+      CollectionAssert.AreEqual(testList, result);
     }
+
+    // [TestMethod]
+    // public void Update_UpdatesTaskInDatabase_String()
+    // {
+    //   //Arrange
+    //   string description = "Walk the Dog";
+    //   Task testTask = new Task(description, 1, "2017-01-01");
+    //   testTask.Save();
+    //   string newDescription = "Mow the lawn";
+    //
+    //   //Act
+    //   testTask.UpdateDescription(newDescription);
+    //
+    //   string result = Task.Find(testTask.GetId()).GetDescription();
+    //
+    //   //Assert
+    //   Assert.AreEqual(newDescription, result);
+    // }
+    //
+    // [TestMethod]
+    // public void Delete_DeleteTaskInDatabase_Null()
+    // {
+    //   //Arrange
+    //   string description = "Feed the Fish";
+    //   Task testTask = new Task(description, "2017-01-01");
+    //   testTask.Save();
+    //   // string deletedTask = "";
+    //
+    //   //Act
+    //   testTask.DeleteTask();
+    //   int result = Task.GetAll().Count;
+    //
+    //   //Assert
+    //   Assert.AreEqual(0, result);
+
+    [TestMethod]
+    public void Delete_DeletesTaskAssociationsFromDatabase_TaskList()
+    {
+      //Arrange
+      Category testCategory = new Category("Home stuff");
+      testCategory.Save();
+
+      string testDescription = "Mow the lawn";
+      Task testTask = new Task(testDescription,"2017-01-01");
+      testTask.Save();
+
+      //Act
+      testTask.AddCategory(testCategory);
+      testTask.Delete();
+
+      List<Task> resultCategoryTasks = testCategory.GetTasks();
+      List<Task> testCategoryTasks = new List<Task> {};
+
+      //Assert
+      CollectionAssert.AreEqual(testCategoryTasks, resultCategoryTasks);
+    }
+
+
   }
 }
