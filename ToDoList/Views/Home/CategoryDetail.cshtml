@@ -1,25 +1,27 @@
-<h1>Task List for @Model["category"].GetName()</h1>
-<body>
-  @if (@Model["tasks"].Count == 0)
-  {
-    <h3>No tasks have been added yet!</h3>
-  }
-  <table>
-    <tr>
-      <th>Id</th>
-      <th>Task</th>
-      <th>Due Date</th>
-    </tr>
-    @foreach (var task in @Model["tasks"])
+@* @using ToDoList.Models;
+@var categoryId = Model["category"].GetId() *@
+<h1>To Do List</h1>
+<h2>Category: @Model["category"].GetName()</h2>
+<hr />
+@if (@Model["categoryTasks"].Count != 0)
+{
+  <h4>Here are all the tasks in this category:</h4>
+  <ul>
+    @foreach (var task in @Model["categoryTasks"])
     {
-      <tr>
-      <td>@task.GetId()</td>
-      <td>@task.GetDescription() | <a href="/tasks/@task.GetId()/edit">Edit</a> | <a href="/tasks/@task.GetId()/delete">Delete</a></td>
-      <td>@task.GetDueDate()</td>
-      </tr>
+      <li>@task.GetDescription()</li>
     }
-  </table>
-<br>
-  <a href="/@Model["category"].GetName()/@Model["category"].GetId()/task/add">Add Task</a><br>
-  <a href="/">Homepage</a>
-</body>
+  </ul>
+}
+<h4>Add a task to this category:</h4>
+<form action='/categories/Model["category"].GetId()/tasks/new' method='post'>
+  <label for='task-id'>Select a task</label>
+  <select id='task-id' name='task-id' type='text'>
+    @foreach (var task in @Model["allTasks"])
+    {
+      <option value='@task.GetId()'>@task.GetDescription()</option>
+    }
+  </select>
+  <button type='submit'>Add</button>
+</form>
+<p><a href="/">Return to Main Page</a></p>

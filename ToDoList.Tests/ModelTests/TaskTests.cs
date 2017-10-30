@@ -130,39 +130,24 @@ namespace ToDoList.Tests
       CollectionAssert.AreEqual(testList, result);
     }
 
-    // [TestMethod]
-    // public void Update_UpdatesTaskInDatabase_String()
-    // {
-    //   //Arrange
-    //   string description = "Walk the Dog";
-    //   Task testTask = new Task(description, 1, "2017-01-01");
-    //   testTask.Save();
-    //   string newDescription = "Mow the lawn";
-    //
-    //   //Act
-    //   testTask.UpdateDescription(newDescription);
-    //
-    //   string result = Task.Find(testTask.GetId()).GetDescription();
-    //
-    //   //Assert
-    //   Assert.AreEqual(newDescription, result);
-    // }
-    //
-    // [TestMethod]
-    // public void Delete_DeleteTaskInDatabase_Null()
-    // {
-    //   //Arrange
-    //   string description = "Feed the Fish";
-    //   Task testTask = new Task(description, "2017-01-01");
-    //   testTask.Save();
-    //   // string deletedTask = "";
-    //
-    //   //Act
-    //   testTask.DeleteTask();
-    //   int result = Task.GetAll().Count;
-    //
-    //   //Assert
-    //   Assert.AreEqual(0, result);
+    [TestMethod]
+    public void Update_UpdatesTaskInDatabase_String()
+    {
+      //Arrange
+      string description = "Walk the Dog";
+      Task testTask = new Task(description, "2017-01-01");
+      testTask.Save();
+      string newDescription = "Mow the lawn";
+
+      //Act
+      testTask.UpdateDescription(newDescription);
+
+      string result = Task.Find(testTask.GetId()).GetDescription();
+
+      //Assert
+      Assert.AreEqual(newDescription, result);
+    }
+
 
     [TestMethod]
     public void Delete_DeletesTaskAssociationsFromDatabase_TaskList()
@@ -184,6 +169,29 @@ namespace ToDoList.Tests
 
       //Assert
       CollectionAssert.AreEqual(testCategoryTasks, resultCategoryTasks);
+    }
+
+    [TestMethod]
+    public void IsCompleted_UpdatesTaskToCompletedStatus_Completed()
+    {
+      //Arrange
+      Category testCategory = new Category("Home stuff");
+      testCategory.Save();
+
+      string testDescription = "Mow the lawn";
+      Task testTask = new Task(testDescription,"2017-01-01");
+      testTask.Save();
+
+      //Act
+      testTask.UpdateIsCompleted();
+
+      int completedValue = 1;
+
+      int result = testTask.GetIsCompleted();
+
+      //Assert
+      Assert.AreEqual(completedValue, result);
+
     }
 
 
